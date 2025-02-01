@@ -1,12 +1,8 @@
 const express = require("express");
+const jamController = require("../controllers/jamController");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "Hello world",
-  });
-});
+router.route("/").get(jamController.getAllJams);
 
 module.exports = router;
