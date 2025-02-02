@@ -11,6 +11,10 @@ router
   .get(jamController.getAllJams)
   .post(jamMiddleware.validateJam, jamController.createJam);
 
-router.route("/:id").get(jamController.getJam);
+router
+  .route("/:id")
+  .get(jamController.getJam)
+  .patch(jamController.updateJam)
+  .delete(jamController.deleteJam);
 
 module.exports = router;

@@ -1,20 +1,17 @@
-const mongoose = require("mongoose");
 const Jam = require("../models/jamModel");
 
 exports.getAllJams = async (req, res) => {
   try {
-    const jam = await Jam.find();
+    const jams = await Jam.find();
     res.status(200).json({
       status: "Success",
-      results: jam.length,
-      data: {
-        jam,
-      },
+      results: jams.length,
+      data: { jams },
     });
   } catch (err) {
-    res.status(404).json({
+    res.status(500).json({
       status: "Failed",
-      message: err,
+      message: "Internal Server Error",
     });
   }
 };
@@ -24,14 +21,12 @@ exports.getJam = async (req, res) => {
     const jam = await Jam.findById(req.params.id);
     res.status(200).json({
       status: "Success",
-      data: {
-        jam,
-      },
+      data: { jam },
     });
   } catch (err) {
-    res.status(404).json({
-      stsus: "Failed",
-      message: err,
+    res.status(500).json({
+      status: "Failed",
+      message: "Internal Server Error",
     });
   }
 };
@@ -44,9 +39,58 @@ exports.createJam = async (req, res) => {
       data: newJam,
     });
   } catch (err) {
-    res.stsus(400).json({
-      response: "Failed",
-      message: err,
+    res.status(400).json({
+      status: "Failed",
+      message: err.message,
+    });
+  }
+};
+
+exports.updateJam = async (req, res) => {
+  try {
+    const jam = await Jam.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!jam) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "Jam not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      data: { jam },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "Failed",
+      message: "Internal Server Error",
+    });
+  }
+};
+
+exports.deleteJam = async (req, res) => {
+  try {
+    const jam = await Jam.findByIdAndDelete(req.params.id);
+
+    if (!jam) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "Jam not found",
+      });
+    }
+
+    res.status(204).json({
+      status: "Success",
+      data: null,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "Failed",
+      message: "Internal Server Error",
     });
   }
 };
