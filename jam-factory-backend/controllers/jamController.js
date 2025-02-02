@@ -35,3 +35,18 @@ exports.getJam = async (req, res) => {
     });
   }
 };
+
+exports.createJam = async (req, res) => {
+  try {
+    const newJam = await Jam.create(req.body);
+    res.status(201).json({
+      status: "Success",
+      data: newJam,
+    });
+  } catch (err) {
+    res.stsus(400).json({
+      response: "Failled",
+      message: err,
+    });
+  }
+};
