@@ -5,16 +5,22 @@ function App() {
   const [jams, setJams] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/v1/jams")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/v1/jams");
+        const data = await response.json();
+
         if (data.status === "Success") {
           setJams(data.data.jams);
         } else {
           console.error("Failed to fetch jams: Status not 'Success'");
         }
-      })
-      .catch((error) => console.error("Error fetching jams:", error));
+      } catch (error) {
+        console.error("Error fetching jams:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -34,7 +40,7 @@ function App() {
         <tbody>
           {jams.map((jam) => (
             <tr key={jam._id}>
-              <td>{jam.name}</td> {/* Updated to 'name' */}
+              <td>{jam.name}</td>
               <td>{jam.fruitType}</td>
               <td>{jam.batchSize}</td>
               <td>{jam.sugarAmount}</td>
