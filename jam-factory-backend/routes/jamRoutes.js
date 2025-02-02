@@ -11,6 +11,8 @@ router
   .get(jamController.getAllJams)
   .post(jamMiddleware.validateJam, jamController.createJam);
 
+router.route("/efficiency").get(jamController.getJamEfficiency);
+
 router
   .route("/:id")
   .get(jamController.getJam)

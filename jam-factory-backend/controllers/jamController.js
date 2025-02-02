@@ -94,3 +94,47 @@ exports.deleteJam = async (req, res) => {
     });
   }
 };
+
+exports.getJamEfficiency = async (req, res) => {
+  try {
+    const efficiencyData = await Jam.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalBatchSize: { $sum: "$batchSize" },
+          totalSugarAmount: { $sum: "$sugarAmount" },
+        },
+      },
+      {
+        $project: {
+          efficiency: {
+            $cond: {
+              if: { $eq: ["$totalSugarAmount", 0] },
+              then: 0,
+              else: { $divide: ["$totalBatchSize", "$totalSugarAmount"] },
+            },
+          },
+        },
+      },
+    ]);
+
+    if (!efficiencyData.length) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No jam data available",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      efficiency:
+        efficiencyData[0].efficiency > 5 ? "efficient" : "inefficient",
+      efficiencyValue: efficiencyData[0].efficiency,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "Failed",
+      message: err.message,
+    });
+  }
+};
