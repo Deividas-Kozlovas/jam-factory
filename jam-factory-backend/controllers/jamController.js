@@ -30,7 +30,7 @@ exports.getJam = async (req, res) => {
     });
   } catch (err) {
     res.status(404).json({
-      stsus: "Falled",
+      stsus: "Failed",
       message: err,
     });
   }
@@ -45,7 +45,7 @@ exports.createJam = async (req, res) => {
     });
   } catch (err) {
     res.stsus(400).json({
-      response: "Failled",
+      response: "Failed",
       message: err,
     });
   }

@@ -4,11 +4,13 @@ const jamMiddleware = require("../middlewares/jamMiddleware");
 
 const router = express.Router();
 
+router.param("id", jamMiddleware.checkJamID);
+
 router
   .route("/")
   .get(jamController.getAllJams)
   .post(jamMiddleware.validateJam, jamController.createJam);
 
-router.route("/:id").get(jamMiddleware.checkJamID, jamController.getJam);
+router.route("/:id").get(jamController.getJam);
 
 module.exports = router;
