@@ -17,9 +17,11 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const jamRouter = require("./routes/jamRoutes");
+const userRouter = require("./routes/userRoutes");
 
 app.use(express.json());
 
 app.use("/api/v1/jams", jamRouter);
+app.use("/api/v1/users", userRouter);
 
 module.exports = app;
